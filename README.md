@@ -1,20 +1,70 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Sujal Kumar — Portfolio
 
-# Run and deploy your AI Studio app
+Personal portfolio site of **Sujal Kumar**, Software Engineer (Java · Spring Boot · Python · Generative AI).
 
-This contains everything you need to run your app locally.
+🔗 **Live:** https://sujalkumar.dev *(replace once deployed)*
 
-View your app in AI Studio: https://ai.studio/apps/1d3821d5-eec2-460a-a73f-464d88ecb73a
+## Tech stack
 
-## Run Locally
+| Layer | Choice |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build | Vite 6 |
+| Styling | Tailwind CSS v4 (inline `@theme`) |
+| Routing | React Router 7 |
+| Animation | motion (Framer Motion successor) |
+| 3D | react-three-fiber + drei + three |
+| SEO | react-helmet-async + JSON-LD |
+| Icons | lucide-react |
 
-**Prerequisites:**  Node.js
+## Run locally
 
+Requires **Node ≥ 20**.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```bash
+npm install
+npm run dev        # http://localhost:3000
+```
+
+## Scripts
+
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Vite dev server on port 3000 |
+| `npm run build` | Production build to `dist/` |
+| `npm run preview` | Serve the production build |
+| `npm run lint` | TypeScript type-check (`tsc --noEmit`) |
+
+## Project structure
+
+```
+src/
+├── main.tsx              entry — HelmetProvider + StrictMode
+├── App.tsx               Router + global layout
+├── constants.ts          PROJECTS & SKILLS (single source of truth for content)
+├── index.css             Tailwind theme tokens + custom utilities
+├── lib/utils.ts          cn() className merger
+├── components/
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   ├── Background3D.tsx  particle field (react-three-fiber)
+│   ├── ModelViewer.tsx   interactive 3D placeholder per project category
+│   └── ScrollToHash.tsx  smooth scroll on hash/route change
+└── pages/
+    ├── Home.tsx
+    ├── Projects.tsx
+    ├── ProjectDetail.tsx
+    └── About.tsx
+```
+
+## Deployment
+
+Vercel / Netlify-ready — `npm run build` outputs a static `dist/`.
+
+For Vercel: connect the repo, framework preset = **Vite**, no env vars required.
+
+## Contact
+
+- **Email:** sujal31122005@gmail.com
+- **LinkedIn:** [sujal-kumar](https://linkedin.com/in/sujal-kumar)
+- **GitHub:** [sujalkumar27](https://github.com/sujalkumar27)

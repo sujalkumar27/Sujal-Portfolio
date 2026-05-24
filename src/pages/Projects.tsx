@@ -8,11 +8,25 @@ import { cn } from '../lib/utils';
 
 export const Projects = () => {
   const [filter, setFilter] = useState('All');
+  const [query, setQuery] = useState('');
   const categories = ['All', ...Array.from(new Set(PROJECTS.map(p => p.category)))];
 
-  const filteredProjects = filter === 'All' 
-    ? PROJECTS 
-    : PROJECTS.filter(p => p.category === filter);
+  const q = query.trim().toLowerCase();
+  const filteredProjects = PROJECTS.filter((p) => {
+    const matchesCategory = filter === 'All' || p.category === filter;
+    if (!matchesCategory) return false;
+    if (!q) return true;
+    const haystack = [
+      p.title,
+      p.category,
+      p.description,
+      ...(p.technicalSpecs?.software ?? []),
+      ...(p.technicalSpecs?.stack ?? [])
+    ]
+      .join(' ')
+      .toLowerCase();
+    return haystack.includes(q);
+  });
 
   return (
     <div className="pt-32 px-6 min-h-screen">
@@ -51,17 +65,27 @@ export const Projects = () => {
           </div>
           
           <div className="relative max-w-xs w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
-            <input 
-              type="text" 
-              placeholder="Search projects..." 
+            <label htmlFor="project-search" className="sr-only">Search projects</label>
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} aria-hidden="true" />
+            <input
+              id="project-search"
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search projects..."
               className="w-full glass rounded-full py-2 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
         </div>
 
+        {filteredProjects.length === 0 && (
+          <div className="glass rounded-3xl p-12 text-center text-slate-400">
+            No projects match <span className="text-primary font-bold">"{query}"</span> in <span className="text-secondary font-bold">{filter}</span>.
+          </div>
+        )}
+
         {/* Grid */}
-        <motion.div 
+        <motion.div
           layout
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
@@ -86,9 +110,11 @@ export const Projects = () => {
               >
                 <Link to={`/projects/${project.id}`}>
                   <div className="relative aspect-square rounded-3xl overflow-hidden mb-6 shadow-xl shadow-black/50">
-                    <img 
-                      src={project.image} 
-                      alt={project.title} 
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       referrerPolicy="no-referrer"
                     />

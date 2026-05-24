@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sujalkumar.dev/sitemap.xml

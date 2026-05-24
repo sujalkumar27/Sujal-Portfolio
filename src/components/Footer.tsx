@@ -17,22 +17,28 @@ export const Footer = () => {
             <span className="font-display font-bold text-2xl tracking-tighter uppercase">SUJAL<span className="text-primary">KUMAR</span></span>
           </Link>
           <p className="text-slate-400 max-w-sm mb-8 text-lg leading-relaxed">
-            Software Developer specializing in Core Java, Spring Boot, and workflow automation. Building reliable systems that reduce manual work.
+            Software Engineer specializing in Java, Spring Boot, Python, and Generative AI. Oracle-certified backend developer building reliable systems and LLM-powered tools.
           </p>
           <div className="flex gap-6">
-            <motion.a 
+            <motion.a
               whileHover={{ y: -5, scale: 1.1, rotateZ: 5 }}
-              href="https://linkedin.com/in/sujal-kumar" 
+              href="https://linkedin.com/in/sujal-kumar"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Sujal Kumar on LinkedIn"
               className="w-12 h-12 rounded-2xl glass flex items-center justify-center hover:text-primary transition-colors shadow-lg shadow-black/50"
             >
-              <Linkedin size={20} />
+              <Linkedin size={20} aria-hidden="true" />
             </motion.a>
-            <motion.a 
+            <motion.a
               whileHover={{ y: -5, scale: 1.1, rotateZ: -5 }}
-              href="https://github.com/sujalkumar27" 
+              href="https://github.com/sujalkumar27"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Sujal Kumar on GitHub"
               className="w-12 h-12 rounded-2xl glass flex items-center justify-center hover:text-primary transition-colors shadow-lg shadow-black/50"
             >
-              <Github size={20} />
+              <Github size={20} aria-hidden="true" />
             </motion.a>
           </div>
         </div>

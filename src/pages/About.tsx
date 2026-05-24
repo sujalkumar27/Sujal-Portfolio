@@ -1,11 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
-import { Send, Mail, MapPin, Globe, Box, Cpu, Zap, Palette, Layers, Sun, Home, Linkedin, Github, ChevronDown, Download } from 'lucide-react';
+import { Send, Mail, MapPin, Globe, Box, Cpu, Zap, Palette, Layers, Sun, Home, Linkedin, Github, ChevronDown, Download, Phone, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
 
+// Replace this with your Formspree endpoint (https://formspree.io — free tier).
+// Until you set one, the form falls back to opening the user's email client.
+const FORMSPREE_ENDPOINT = '';
+
+type FormState = 'idle' | 'submitting' | 'success' | 'error';
+
 export const About = () => {
+  const [formState, setFormState] = useState<FormState>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormState('submitting');
+    setErrorMsg('');
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const name = String(data.get('name') ?? '');
+    const email = String(data.get('email') ?? '');
+    const inquiryType = String(data.get('inquiryType') ?? '');
+    const message = String(data.get('message') ?? '');
+
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setFormState('error');
+      setErrorMsg('Please fill name, email, and message.');
+      return;
+    }
+
+    if (!FORMSPREE_ENDPOINT) {
+      const body = encodeURIComponent(
+        `Name: ${name}\nInquiry: ${inquiryType}\n\n${message}`
+      );
+      const subject = encodeURIComponent(`[Portfolio] ${inquiryType} — ${name}`);
+      window.location.href = `mailto:sujal31122005@gmail.com?subject=${subject}&body=${body}`;
+      setFormState('success');
+      form.reset();
+      return;
+    }
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, inquiryType, message })
+      });
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+      setFormState('success');
+      form.reset();
+    } catch (err) {
+      setFormState('error');
+      setErrorMsg(err instanceof Error ? err.message : 'Failed to send. Try again or email me directly.');
+    }
+  };
+
   const tools = [
     { name: 'Java', icon: Zap, color: 'text-primary' },
     { name: 'Spring Boot', icon: Cpu, color: 'text-secondary' },
@@ -33,43 +86,52 @@ export const About = () => {
             viewport={{ once: true }}
           >
             <h1 className="text-5xl md:text-7xl mb-8">The <span className="text-gradient">Engineer</span> Behind the Code</h1>
-            <div className="space-y-6 text-lg text-slate-400 leading-relaxed">
+            <div className="space-y-6 text-lg text-slate-300 leading-relaxed">
               <p>
-                I am a Software Developer with strong expertise in Core Java (Java 8+), OOP, collections, multithreading, and SQL. I specialize in backend logic development, workflow automation, and API integrations.
+                I'm a Software Engineer with deep expertise in <strong className="text-slate-100">Core Java (8+)</strong> — OOP, collections, multithreading, exception handling, and SQL — and an <strong className="text-slate-100">Oracle Certified Foundations Associate</strong> in Java. My day job is backend logic, workflow automation, and API integrations that reduce manual work and keep systems honest.
               </p>
               <p>
-                As an Oracle-certified Java developer, I focus on building reliable systems that reduce manual work and improve business efficiency. My experience ranges from customizing CRM workflows to developing full-scale management systems.
+                On the side, I've been shipping <strong className="text-slate-100">Generative AI</strong> applications: a production-style RAG pipeline (BFSI Copilot) built on FastAPI, LangChain, ChromaDB, and Llama 3 via Groq. I care about systems that are <em>reliable first, clever second</em> — grounded LLM responses, parameterized queries, transactional service boundaries.
+              </p>
+              <p>
+                <strong className="text-slate-100">300+ DSA problems</strong> solved on LeetCode &amp; GeeksforGeeks. Currently building automation at SIFTAI used across <strong className="text-primary">500+ customer accounts</strong>.
               </p>
               <div className="flex flex-wrap gap-6 pt-4">
                 <div className="flex items-center gap-2 text-sm">
                   <MapPin size={18} className="text-primary" />
                   <span>Greater Noida, India</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
+                <a href="mailto:sujal31122005@gmail.com" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
                   <Mail size={18} className="text-secondary" />
                   <span>sujal31122005@gmail.com</span>
-                </div>
+                </a>
+                <a href="tel:+919625066840" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
+                  <Phone size={18} className="text-primary" />
+                  <span>+91 96250 66840</span>
+                </a>
               </div>
               <div className="flex gap-4 pt-4">
-                <motion.a 
+                <motion.a
                   whileHover={{ y: -5, scale: 1.1, rotateZ: 5 }}
-                  href="https://linkedin.com/in/sujal-kumar" 
+                  href="https://linkedin.com/in/sujal-kumar"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl glass flex items-center justify-center hover:text-primary transition-colors"
+                  aria-label="Sujal Kumar on LinkedIn"
                   title="LinkedIn"
                 >
-                  <Linkedin size={18} />
+                  <Linkedin size={18} aria-hidden="true" />
                 </motion.a>
-                <motion.a 
+                <motion.a
                   whileHover={{ y: -5, scale: 1.1, rotateZ: -5 }}
-                  href="https://github.com/sujalkumar27" 
+                  href="https://github.com/sujalkumar27"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl glass flex items-center justify-center hover:text-primary transition-colors"
+                  aria-label="Sujal Kumar on GitHub"
                   title="GitHub"
                 >
-                  <Github size={18} />
+                  <Github size={18} aria-hidden="true" />
                 </motion.a>
                 <a 
                   href="/resume.pdf" 
@@ -90,16 +152,56 @@ export const About = () => {
             className="relative"
             style={{ perspective: 1000 }}
           >
-            <motion.div 
-              whileHover={{ rotateY: -10, rotateX: 5, scale: 1.05 }}
+            <motion.div
+              whileHover={{ rotateY: -8, rotateX: 4, scale: 1.03 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="aspect-square rounded-3xl overflow-hidden glass p-2 shadow-2xl shadow-secondary/20"
+              className="relative aspect-[3/4] max-w-sm mx-auto group"
+              style={{ transformStyle: 'preserve-3d' }}
             >
-              <img 
-                src="/api/attachments/7179477e-2f54-4722-a9f1-32219717515c" 
-                alt="Sujal Kumar" 
-                className="w-full h-full object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700"
+              {/* Glow halo (secondary-leaning to differentiate from Home) */}
+              <div
+                aria-hidden="true"
+                className="absolute -inset-6 bg-linear-to-br from-secondary/30 via-primary/20 to-secondary/30 rounded-full blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-700"
               />
+
+              {/* Photo frame */}
+              <div className="relative z-10 w-full h-full rounded-3xl overflow-hidden border border-white/10 bg-linear-to-b from-white/5 via-transparent to-white/[0.02] backdrop-blur-sm shadow-2xl shadow-secondary/20">
+                <img
+                  src="/sujal-kumar.jpg"
+                  alt="Sujal Kumar — Software Engineer"
+                  className="absolute inset-0 w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-[1.02]"
+                  style={{ filter: 'drop-shadow(0 30px 40px rgba(208, 188, 255, 0.3))' }}
+                />
+
+                {/* Bottom fade */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-[#050505] via-[#050505]/40 to-transparent pointer-events-none"
+                />
+                {/* Top fade */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-1/6 bg-linear-to-b from-[#050505]/50 to-transparent pointer-events-none"
+                />
+
+                {/* Side accent bars (vertical "scan rails") */}
+                <div
+                  aria-hidden="true"
+                  className="absolute left-0 top-1/4 bottom-1/4 w-0.5 bg-linear-to-b from-transparent via-primary to-transparent opacity-60"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute right-0 top-1/4 bottom-1/4 w-0.5 bg-linear-to-b from-transparent via-secondary to-transparent opacity-60"
+                />
+
+                {/* Animated scan line */}
+                <motion.div
+                  aria-hidden="true"
+                  animate={{ y: ['0%', '100%', '0%'] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+                  className="absolute inset-x-0 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent"
+                />
+              </div>
             </motion.div>
             <motion.div 
               animate={{ y: [0, -10, 0] }}
@@ -246,24 +348,25 @@ export const About = () => {
             <p className="text-slate-400">Have a vision that needs a dimension? Let's talk.</p>
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit} noValidate>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-4">Name</label>
-                <input type="text" className="w-full glass rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="John Doe" />
+                <label htmlFor="contact-name" className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-4 block">Name</label>
+                <input id="contact-name" name="name" type="text" required autoComplete="name" className="w-full glass rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="John Doe" />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-4">Email</label>
-                <input type="email" className="w-full glass rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="john@example.com" />
+                <label htmlFor="contact-email" className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-4 block">Email</label>
+                <input id="contact-email" name="email" type="email" required autoComplete="email" className="w-full glass rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="john@example.com" />
               </div>
             </div>
             <div className="space-y-2 relative">
-              <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-4">Inquiry Type</label>
+              <label htmlFor="contact-inquiry" className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-4 block">Inquiry Type</label>
               <div className="relative">
-                <select className="w-full glass rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-primary/50 appearance-none bg-slate-900 cursor-pointer">
-                  <option className="bg-slate-900 text-white">Web Application</option>
+                <select id="contact-inquiry" name="inquiryType" defaultValue="Backend Development" className="w-full glass rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-primary/50 appearance-none bg-slate-900 cursor-pointer">
                   <option className="bg-slate-900 text-white">Backend Development</option>
+                  <option className="bg-slate-900 text-white">Generative AI / RAG</option>
                   <option className="bg-slate-900 text-white">Workflow Automation</option>
+                  <option className="bg-slate-900 text-white">Full-time Opportunity</option>
                   <option className="bg-slate-900 text-white">Mentorship Request</option>
                   <option className="bg-slate-900 text-white">Other</option>
                 </select>
@@ -273,11 +376,31 @@ export const About = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-4">Message</label>
-              <textarea rows={5} className="w-full glass rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Tell me about your vision..."></textarea>
+              <label htmlFor="contact-message" className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-4 block">Message</label>
+              <textarea id="contact-message" name="message" required rows={5} className="w-full glass rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Tell me about the role or the project..."></textarea>
             </div>
-            <button type="submit" className="w-full btn-primary flex items-center justify-center gap-2 py-5 text-lg">
-              Send Transmission <Send size={20} />
+
+            {formState === 'success' && (
+              <div role="status" className="glass rounded-2xl p-4 flex items-center gap-3 border border-green-400/30 text-green-300">
+                <CheckCircle2 size={20} /> Message sent. I'll reply within 24 hours.
+              </div>
+            )}
+            {formState === 'error' && (
+              <div role="alert" className="glass rounded-2xl p-4 flex items-center gap-3 border border-red-400/30 text-red-300">
+                <AlertCircle size={20} /> {errorMsg}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={formState === 'submitting'}
+              className="w-full btn-primary flex items-center justify-center gap-2 py-5 text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {formState === 'submitting' ? (
+                <>Sending<Loader2 size={20} className="animate-spin" /></>
+              ) : (
+                <>Send Message <Send size={20} /></>
+              )}
             </button>
           </form>
         </section>

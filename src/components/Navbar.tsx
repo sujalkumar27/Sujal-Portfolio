@@ -57,8 +57,14 @@ export const Navbar = () => {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button className="md:hidden text-slate-200" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X /> : <Menu />}
+        <button
+          className="md:hidden text-slate-200"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
+          aria-controls="mobile-nav"
+        >
+          {isOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
       </div>
 
@@ -69,6 +75,7 @@ export const Navbar = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
+            id="mobile-nav"
             className="absolute top-full left-0 right-0 glass border-b border-white/10 md:hidden"
           >
             <div className="flex flex-col p-6 gap-4">

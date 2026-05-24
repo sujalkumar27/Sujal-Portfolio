@@ -249,6 +249,7 @@ export const ModelViewer = ({ type }: ModelViewerProps) => {
             onClick={() => rotateModel('left')}
             className="glass p-2 rounded-full hover:bg-white/10 transition-colors group/btn"
             title="Rotate Left"
+            aria-label="Rotate model left"
           >
             <ChevronLeft className="w-4 h-4 text-slate-400 group-hover/btn:text-white" />
           </button>
@@ -256,6 +257,7 @@ export const ModelViewer = ({ type }: ModelViewerProps) => {
             onClick={() => rotateModel('right')}
             className="glass p-2 rounded-full hover:bg-white/10 transition-colors group/btn"
             title="Rotate Right"
+            aria-label="Rotate model right"
           >
             <ChevronRight className="w-4 h-4 text-slate-400 group-hover/btn:text-white" />
           </button>
@@ -266,6 +268,8 @@ export const ModelViewer = ({ type }: ModelViewerProps) => {
               autoRotate ? "bg-primary/20 border-primary/40" : "hover:bg-white/10"
             )}
             title="Toggle Auto-Rotate"
+            aria-label="Toggle auto-rotate"
+            aria-pressed={autoRotate}
           >
             <RotateCcw className={cn("w-4 h-4 transition-colors", autoRotate ? "text-primary" : "text-slate-400")} />
           </button>
@@ -276,6 +280,8 @@ export const ModelViewer = ({ type }: ModelViewerProps) => {
               wireframe ? "bg-primary/20 border-primary/40" : "hover:bg-white/10"
             )}
             title="Toggle Wireframe"
+            aria-label="Toggle wireframe mode"
+            aria-pressed={wireframe}
           >
             <Layers className={cn("w-4 h-4 transition-colors", wireframe ? "text-primary" : "text-slate-400")} />
           </button>
@@ -283,6 +289,7 @@ export const ModelViewer = ({ type }: ModelViewerProps) => {
             onClick={() => setIsFullscreen(!isFull)}
             className="glass p-2 rounded-full hover:bg-white/10 transition-colors group/btn"
             title={isFull ? "Exit Fullscreen" : "Enter Fullscreen"}
+            aria-label={isFull ? 'Exit fullscreen' : 'Enter fullscreen'}
           >
             {isFull ? (
               <X className="w-5 h-5 text-slate-400 group-hover/btn:text-white" />
@@ -305,6 +312,8 @@ export const ModelViewer = ({ type }: ModelViewerProps) => {
                 )}
                 style={{ backgroundColor: c.hex }}
                 title={c.name}
+                aria-label={`Set model color to ${c.name}`}
+                aria-pressed={color === c.hex}
               />
             ))}
           </div>

@@ -1,15 +1,25 @@
-import React from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Box, Cpu, Zap, Layers, ChevronRight, Maximize2 } from 'lucide-react';
+import { ArrowLeft, Cpu, Layers, ChevronRight } from 'lucide-react';
 import { PROJECTS } from '../constants';
-import { cn } from '../lib/utils';
-import { ModelViewer } from '../components/ModelViewer';
+
+const ModelViewer = lazy(() =>
+  import('../components/ModelViewer').then((m) => ({ default: m.ModelViewer }))
+);
+
+const ModelViewerFallback = () => (
+  <div className="w-full h-full min-h-[400px] glass rounded-3xl flex items-center justify-center">
+    <div className="flex items-center gap-3 text-slate-400 text-sm">
+      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      Loading 3D viewer…
+    </div>
+  </div>
+);
 
 export const ProjectDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const project = PROJECTS.find(p => p.id === id);
 
   if (!project) {
@@ -37,9 +47,10 @@ export const ProjectDetail = () => {
       </Helmet>
       {/* Hero Header */}
       <section className="relative h-[70vh] overflow-hidden">
-        <img 
-          src={project.image} 
-          alt={project.title} 
+        <img
+          src={project.image}
+          alt={project.title}
+          decoding="async"
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
         />
@@ -66,7 +77,9 @@ export const ProjectDetail = () => {
           {/* Main Content */}
           <div className="lg:col-span-2">
             <div className="mb-16">
-              <ModelViewer type={project.category.toLowerCase() as any} />
+              <Suspense fallback={<ModelViewerFallback />}>
+                <ModelViewer type={project.category.toLowerCase() as any} />
+              </Suspense>
             </div>
 
             <div className="mb-12">
@@ -112,7 +125,7 @@ export const ProjectDetail = () => {
                 className="rounded-3xl overflow-hidden glass aspect-square shadow-2xl shadow-black/50"
                 style={{ perspective: 1000 }}
               >
-                <img src={`https://picsum.photos/seed/${project.id}-1/800/800`} className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" />
+                <img src={`https://picsum.photos/seed/${project.id}-1/800/800`} alt={`${project.title} gallery 1`} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" />
               </motion.div>
               <motion.div 
                 whileHover={{ rotateY: 10, rotateX: 5, scale: 1.05 }}
@@ -120,7 +133,7 @@ export const ProjectDetail = () => {
                 className="rounded-3xl overflow-hidden glass aspect-square shadow-2xl shadow-black/50"
                 style={{ perspective: 1000 }}
               >
-                <img src={`https://picsum.photos/seed/${project.id}-2/800/800`} className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" />
+                <img src={`https://picsum.photos/seed/${project.id}-2/800/800`} alt={`${project.title} gallery 2`} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" />
               </motion.div>
             </div>
           </div>
