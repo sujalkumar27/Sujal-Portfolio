@@ -59,13 +59,20 @@ export const About = () => {
     }
   };
 
+  // Real brand logos via devicon CDN (https://devicon.dev) — no install, no bundle cost.
   const tools = [
-    { name: 'Java', icon: Zap, color: 'text-primary' },
-    { name: 'Spring Boot', icon: Cpu, color: 'text-secondary' },
-    { name: 'Python', icon: Box, color: 'text-primary' },
-    { name: 'MySQL', icon: Palette, color: 'text-secondary' },
-    { name: 'Hibernate', icon: Layers, color: 'text-primary' },
-    { name: 'Git', icon: Sun, color: 'text-secondary' },
+    { name: 'Java', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
+    { name: 'Spring Boot', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg' },
+    { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+    { name: 'FastAPI', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg' },
+    { name: 'MySQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
+    { name: 'Oracle', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oracle/oracle-original.svg' },
+    { name: 'Hibernate', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/hibernate/hibernate-original.svg' },
+    { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
+    { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
+    { name: 'GitHub', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg' },
+    { name: 'Postman', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg' },
+    { name: 'TypeScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' }
   ];
 
   return (
@@ -304,38 +311,38 @@ export const About = () => {
         {/* Technical Arsenal (Bento Grid) */}
         <section className="mb-32">
           <h2 className="text-4xl mb-12 text-center">Technical Arsenal</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" style={{ perspective: 1000 }}>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4" style={{ perspective: 1000 }}>
             {tools.map((tool, i) => (
               <motion.div
                 key={tool.name}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                animate={{ 
-                  y: [0, -5, 0],
-                  rotateZ: [0, 1, 0]
+                whileHover={{
+                  y: -10,
+                  rotateX: 12,
+                  rotateY: -12,
+                  scale: 1.1,
+                  boxShadow: '0 25px 50px rgba(0, 219, 233, 0.25)'
                 }}
-                transition={{ 
-                  y: { duration: 3 + Math.random() * 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 },
-                  rotateZ: { duration: 4 + Math.random() * 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 },
-                  default: { type: "spring", stiffness: 300, damping: 20 }
-                }}
-                whileHover={{ 
-                  y: -15, 
-                  rotateX: 15, 
-                  rotateY: -15,
-                  scale: 1.15,
-                  boxShadow: "0 25px 50px rgba(0, 219, 233, 0.25)",
-                  z: 50
-                }}
+                transition={{ delay: i * 0.05, type: 'spring', stiffness: 300, damping: 22 }}
                 viewport={{ once: true }}
-                className="glass p-6 rounded-2xl flex flex-col items-center justify-center gap-4 hover:bg-white/10 transition-colors group cursor-pointer"
+                className="glass p-5 rounded-2xl flex flex-col items-center justify-center gap-3 hover:bg-white/10 transition-colors group cursor-default aspect-square"
                 style={{ transformStyle: 'preserve-3d' }}
               >
-                <tool.icon 
-                  className={cn("w-8 h-8 group-hover:scale-110 transition-transform", tool.color)} 
+                <img
+                  src={tool.logo}
+                  alt={`${tool.name} logo`}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-10 h-10 object-contain group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(0,219,233,0.2)]"
                   style={{ transform: 'translateZ(20px)' }}
                 />
-                <span className="text-xs font-bold uppercase tracking-widest" style={{ transform: 'translateZ(10px)' }}>{tool.name}</span>
+                <span
+                  className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-center"
+                  style={{ transform: 'translateZ(10px)' }}
+                >
+                  {tool.name}
+                </span>
               </motion.div>
             ))}
           </div>

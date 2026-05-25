@@ -5,6 +5,7 @@ import { ArrowRight, Zap, Cpu, Box, Palette, Layers, Sun, Download, Code2, Troph
 import { Link } from 'react-router-dom';
 import { PROJECTS, SKILLS } from '../constants';
 import { cn } from '../lib/utils';
+import { AnimatedCounter } from '../components/AnimatedCounter';
 
 const iconMap: Record<string, any> = {
   Zap, Cpu, Box, Palette, Layers, Sun
@@ -245,10 +246,10 @@ export const Home = () => {
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { metric: '300+', label: 'DSA Problems Solved', sub: 'LeetCode · GeeksforGeeks', Icon: Code2, color: 'text-primary' },
-              { metric: '200', label: 'Day GFG Streak', sub: 'Daily problem solving', Icon: Flame, color: 'text-secondary' },
-              { metric: 'Top 20', label: 'CodeTantra Competition', sub: 'Out of 300+ participants', Icon: Trophy, color: 'text-primary' },
-              { metric: '90%ile', label: 'Oracle Java Certified', sub: 'Foundations Associate', Icon: Award, color: 'text-secondary' }
+              { to: 300, suffix: '+', label: 'DSA Problems Solved', sub: 'LeetCode · GeeksforGeeks', Icon: Code2, color: 'text-primary' },
+              { to: 200, suffix: '-day', label: 'GFG Coding Streak', sub: 'Daily problem solving', Icon: Flame, color: 'text-secondary' },
+              { to: 20, prefix: 'Top ', label: 'CodeTantra Competition', sub: 'Out of 300+ participants', Icon: Trophy, color: 'text-primary' },
+              { to: 90, suffix: '%ile', label: 'Oracle Java Certified', sub: 'Foundations Associate', Icon: Award, color: 'text-secondary' }
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -260,7 +261,9 @@ export const Home = () => {
                 className="glass p-6 rounded-3xl hover:bg-white/10 transition-colors"
               >
                 <stat.Icon size={28} className={cn(stat.color, 'mb-4')} />
-                <div className="font-display font-black text-4xl md:text-5xl mb-2 tracking-tighter">{stat.metric}</div>
+                <div className="font-display font-black text-4xl md:text-5xl mb-2 tracking-tighter">
+                  <AnimatedCounter to={stat.to} prefix={stat.prefix} suffix={stat.suffix} />
+                </div>
                 <div className="font-bold text-sm mb-1">{stat.label}</div>
                 <div className="text-xs text-slate-500">{stat.sub}</div>
               </motion.div>

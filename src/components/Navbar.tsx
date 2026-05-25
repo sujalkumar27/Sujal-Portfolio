@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Cpu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMac, setIsMac] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -14,6 +15,21 @@ export const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Auto-close the mobile menu whenever the route changes.
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname, location.hash]);
+
+  // Show the right modifier key in the ⌘K badge.
+  useEffect(() => {
+    setIsMac(/Mac|iPhone|iPad/.test(navigator.platform));
+  }, []);
+
+  const fireCommandPalette = () => {
+    const e = new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, metaKey: true, bubbles: true });
+    window.dispatchEvent(e);
+  };
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -38,7 +54,7 @@ export const Navbar = () => {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.path}
@@ -51,6 +67,17 @@ export const Navbar = () => {
               {link.name}
             </Link>
           ))}
+
+          <button
+            type="button"
+            onClick={fireCommandPalette}
+            aria-label="Open command palette"
+            className="hidden lg:inline-flex items-center gap-2 px-2.5 py-1 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors text-xs font-mono"
+          >
+            <kbd className="font-sans text-[10px]">{isMac ? '⌘' : 'Ctrl'}</kbd>
+            <kbd className="font-sans text-[10px]">K</kbd>
+          </button>
+
           <Link to="/about#contact" className="btn-primary py-2 px-5 text-sm">
             Hire Me
           </Link>
