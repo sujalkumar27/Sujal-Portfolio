@@ -41,7 +41,7 @@ export const Projects = () => {
         <header className="mb-16">
           <h1 className="text-5xl md:text-7xl mb-6">Project <span className="text-gradient">Archive</span></h1>
           <p className="text-slate-400 max-w-2xl text-lg">
-            A curated collection of digital environments, character studies, and procedural experiments. Each project represents a milestone in technical exploration.
+            A curated set of backend systems, AI-powered tools, and full-stack applications I've built. Each entry has the problem, the architecture, and the code.
           </p>
         </header>
 

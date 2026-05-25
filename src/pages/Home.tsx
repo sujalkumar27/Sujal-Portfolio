@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, Zap, Cpu, Box, Palette, Layers, Sun, Download, Code2, Trophy, Flame, Award, ExternalLink } from 'lucide-react';
@@ -120,25 +119,19 @@ export const Home = () => {
                 <div aria-hidden="true" className="absolute bottom-3 left-3 w-6 h-6 border-l-2 border-b-2 border-secondary/60 group-hover:border-secondary transition-colors rounded-bl-lg" />
                 <div aria-hidden="true" className="absolute bottom-3 right-3 w-6 h-6 border-r-2 border-b-2 border-primary/60 group-hover:border-primary transition-colors rounded-br-lg" />
               </div>
-              
-              {/* Floating elements */}
-              <motion.div 
-                animate={{ 
-                  y: [0, -20, 0],
-                  rotateZ: [0, 5, 0]
-                }}
+
+              {/* Floating side badges */}
+              <motion.div
+                animate={{ y: [0, -20, 0], rotateZ: [0, 5, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
                 className="absolute -top-10 -right-10 glass p-4 rounded-2xl hidden md:block z-20"
               >
                 <div className="text-xs text-slate-400 mb-1">Certified</div>
                 <div className="font-display font-bold text-primary">Oracle Java</div>
               </motion.div>
-              
-              <motion.div 
-                animate={{ 
-                  y: [0, 20, 0],
-                  rotateZ: [0, -5, 0]
-                }}
+
+              <motion.div
+                animate={{ y: [0, 20, 0], rotateZ: [0, -5, 0] }}
                 transition={{ duration: 5, repeat: Infinity, delay: 1 }}
                 className="absolute -bottom-10 -left-10 glass p-4 rounded-2xl hidden md:block z-20"
               >
@@ -159,7 +152,7 @@ export const Home = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div>
               <h2 className="text-4xl md:text-5xl mb-4">Technical Edge</h2>
-              <p className="text-slate-400 max-w-md">The tools and nodes behind every digital masterpiece.</p>
+              <p className="text-slate-400 max-w-md">The stack I reach for to ship reliable backend systems and AI-powered tools.</p>
             </div>
             <div className="flex gap-2">
               <div className="w-12 h-1 bg-primary rounded-full"></div>
