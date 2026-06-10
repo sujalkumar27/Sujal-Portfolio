@@ -1,11 +1,18 @@
-import React from 'react';
+import { Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
-import { Cpu, Github, Linkedin } from 'lucide-react';
+import { Github, Linkedin } from 'lucide-react';
 import { motion } from 'motion/react';
+
+const Footer3DAccent = lazy(() =>
+  import('./Footer3DAccent').then((m) => ({ default: m.Footer3DAccent }))
+);
 
 export const Footer = () => {
   return (
-    <footer className="bg-black/60 backdrop-blur-md border-t border-white/5 py-20 mt-20 relative overflow-hidden">
+    <footer className="bg-black/60 backdrop-blur-md border-t border-white/5 pb-20 mt-20 relative overflow-hidden">
+      <Suspense fallback={<div className="h-40" aria-hidden="true" />}>
+        <Footer3DAccent />
+      </Suspense>
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-linear-to-r from-transparent via-primary/30 to-transparent"></div>
       
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16 relative z-10">

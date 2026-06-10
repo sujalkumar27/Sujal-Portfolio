@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, Zap, Cpu, Box, Palette, Layers, Sun, Download, Code2, Trophy, Flame, Award, ExternalLink } from 'lucide-react';
@@ -5,6 +6,21 @@ import { Link } from 'react-router-dom';
 import { PROJECTS, SKILLS } from '../constants';
 import { cn } from '../lib/utils';
 import { AnimatedCounter } from '../components/AnimatedCounter';
+
+// Lazy-load the WebGL skills scene — Three.js is already in a shared chunk used by
+// Background3D, so this only adds the small Skills3DScene module (~few KB).
+const Skills3DScene = lazy(() =>
+  import('../components/Skills3DScene').then((m) => ({ default: m.Skills3DScene }))
+);
+
+const Skills3DFallback = () => (
+  <div className="w-full aspect-[16/10] sm:aspect-[16/9] max-w-5xl mx-auto rounded-3xl glass flex items-center justify-center">
+    <div className="flex items-center gap-2 text-slate-400 text-xs">
+      <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      Loading skills universe
+    </div>
+  </div>
+);
 
 const iconMap: Record<string, any> = {
   Zap, Cpu, Box, Palette, Layers, Sun
@@ -146,13 +162,16 @@ export const Home = () => {
         <div className="absolute inset-0 -z-10 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
       </section>
 
-      {/* Technical Edge Section */}
+      {/* Technical Edge Section — 3D constellation + accessible recap grid */}
       <section className="py-24 px-6 bg-black/20">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs font-bold text-primary mb-4 uppercase tracking-widest">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> WebGL · Three.js
+              </div>
               <h2 className="text-4xl md:text-5xl mb-4">Technical Edge</h2>
-              <p className="text-slate-400 max-w-md">The stack I reach for to ship reliable backend systems and AI-powered tools.</p>
+              <p className="text-slate-400 max-w-md">The stack I reach for to ship reliable backend systems and AI-powered tools. Drag to look around · hover a label to highlight.</p>
             </div>
             <div className="flex gap-2">
               <div className="w-12 h-1 bg-primary rounded-full"></div>
@@ -161,7 +180,15 @@ export const Home = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* 3D scene */}
+          <div className="mb-12 rounded-3xl overflow-hidden border border-white/5 bg-linear-to-b from-white/[0.02] to-transparent">
+            <Suspense fallback={<Skills3DFallback />}>
+              <Skills3DScene />
+            </Suspense>
+          </div>
+
+          {/* Recruiter-friendly recap grid (accessible alternative to the 3D scene) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {SKILLS.map((skill, index) => {
               const Icon = iconMap[skill.icon] || Box;
               return (
@@ -169,32 +196,23 @@ export const Home = () => {
                   key={skill.name}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  whileHover={{ 
-                    y: -15, 
-                    rotateX: 15, 
-                    rotateY: -15,
-                    scale: 1.05,
-                    boxShadow: "0 25px 50px rgba(0, 219, 233, 0.25)",
-                    z: 50
-                  }}
-                  transition={{ delay: index * 0.1, type: "spring", stiffness: 300, damping: 20 }}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  transition={{ delay: index * 0.06, type: 'spring', stiffness: 300, damping: 22 }}
                   viewport={{ once: true }}
-                  className="glass p-8 rounded-3xl hover:bg-white/10 transition-colors group cursor-default"
-                  style={{ perspective: 1000, transformStyle: 'preserve-3d' }}
+                  className="glass p-5 rounded-2xl hover:bg-white/10 transition-colors group cursor-default flex items-center gap-4"
                 >
-                  <div 
-                    className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform"
-                    style={{ transform: 'translateZ(20px)' }}
-                  >
-                    <Icon size={24} />
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform shrink-0">
+                    <Icon size={20} />
                   </div>
-                  <h3 className="text-xl mb-2" style={{ transform: 'translateZ(10px)' }}>{skill.name}</h3>
-                  <div className="flex items-center justify-between" style={{ transform: 'translateZ(5px)' }}>
-                    <span className="text-sm text-slate-400">{skill.level}</span>
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <div key={i} className={cn("w-1.5 h-1.5 rounded-full", i <= 4 ? "bg-primary" : "bg-white/10")}></div>
-                      ))}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base truncate">{skill.name}</h3>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-xs text-slate-400">{skill.level}</span>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <div key={i} className={cn('w-1 h-1 rounded-full', i <= 4 ? 'bg-primary' : 'bg-white/10')}></div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
