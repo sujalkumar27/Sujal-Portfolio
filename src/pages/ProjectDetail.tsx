@@ -9,6 +9,13 @@ const ModelViewer = lazy(() =>
   import('../components/ModelViewer').then((m) => ({ default: m.ModelViewer }))
 );
 
+// Each project category gets its own placeholder model in the viewer.
+const categoryModel: Record<string, 'environment' | 'abstract' | 'character' | 'architecture' | 'procedural'> = {
+  'AI Application': 'procedural',
+  'Web Application': 'abstract',
+  'Desktop Application': 'environment'
+};
+
 const ModelViewerFallback = () => (
   <div className="w-full h-full min-h-[400px] glass rounded-3xl flex items-center justify-center">
     <div className="flex items-center gap-3 text-slate-400 text-sm">
@@ -78,7 +85,7 @@ export const ProjectDetail = () => {
           <div className="lg:col-span-2">
             <div className="mb-16">
               <Suspense fallback={<ModelViewerFallback />}>
-                <ModelViewer type={project.category.toLowerCase() as any} />
+                <ModelViewer type={categoryModel[project.category] ?? 'architecture'} />
               </Suspense>
             </div>
 
