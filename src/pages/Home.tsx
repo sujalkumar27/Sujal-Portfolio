@@ -22,8 +22,14 @@ const Skills3DFallback = () => (
   </div>
 );
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, typeof Zap> = {
   Zap, Cpu, Box, Palette, Layers, Sun
+};
+
+const levelDots: Record<string, number> = {
+  Expert: 5,
+  Advanced: 4,
+  Intermediate: 3
 };
 
 export const Home = () => {
@@ -191,6 +197,7 @@ export const Home = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {SKILLS.map((skill, index) => {
               const Icon = iconMap[skill.icon] || Box;
+              const dots = levelDots[skill.level] ?? 3;
               return (
                 <motion.div
                   key={skill.name}
@@ -210,7 +217,7 @@ export const Home = () => {
                       <span className="text-xs text-slate-400">{skill.level}</span>
                       <div className="flex gap-1">
                         {[1, 2, 3, 4, 5].map((i) => (
-                          <div key={i} className={cn('w-1 h-1 rounded-full', i <= 4 ? 'bg-primary' : 'bg-white/10')}></div>
+                          <div key={i} className={cn('w-1 h-1 rounded-full', i <= dots ? 'bg-primary' : 'bg-white/10')}></div>
                         ))}
                       </div>
                     </div>
