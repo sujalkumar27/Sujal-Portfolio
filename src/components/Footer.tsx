@@ -73,8 +73,8 @@ export const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 mt-20 pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 text-slate-500 text-sm">
         <p>© {new Date().getFullYear()} Sujal Kumar. All rights reserved.</p>
         <div className="flex gap-8">
-          <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>
+          <a href="https://leetcode.com/u/sujalkumar27" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">LeetCode</a>
+          <a href="https://www.geeksforgeeks.org/user/sujalkumar27" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">GeeksforGeeks</a>
         </div>
       </div>
     </footer>
