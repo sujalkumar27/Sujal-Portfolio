@@ -14,6 +14,7 @@ type FormState = 'idle' | 'submitting' | 'success' | 'error';
 export const About = () => {
   const [formState, setFormState] = useState<FormState>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,6 +40,7 @@ export const About = () => {
       );
       const subject = encodeURIComponent(`[Portfolio] ${inquiryType} — ${name}`);
       window.location.href = `mailto:sujal31122005@gmail.com?subject=${subject}&body=${body}`;
+      setSuccessMsg('Your email app should have opened with a draft — just hit send there.');
       setFormState('success');
       form.reset();
       return;
@@ -51,6 +53,7 @@ export const About = () => {
         body: JSON.stringify({ name, email, inquiryType, message })
       });
       if (!res.ok) throw new Error(`Request failed (${res.status})`);
+      setSuccessMsg("Message sent. I'll reply within 24 hours.");
       setFormState('success');
       form.reset();
     } catch (err) {
@@ -389,7 +392,7 @@ export const About = () => {
 
             {formState === 'success' && (
               <div role="status" className="glass rounded-2xl p-4 flex items-center gap-3 border border-green-400/30 text-green-300">
-                <CheckCircle2 size={20} /> Message sent. I'll reply within 24 hours.
+                <CheckCircle2 size={20} /> {successMsg}
               </div>
             )}
             {formState === 'error' && (
