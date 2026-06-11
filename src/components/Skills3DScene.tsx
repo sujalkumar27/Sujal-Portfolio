@@ -138,10 +138,10 @@ const OrbitingSkill = ({ skill }: { skill: OrbitSkill }) => {
 // Camera that gently follows the mouse for depth
 // ─────────────────────────────────────────────────────────────────────────────────────
 const ParallaxCamera = () => {
-  const { camera, mouse } = useThree();
+  const { camera, pointer } = useThree();
   useFrame(() => {
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, mouse.x * 0.6, 0.04);
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, mouse.y * 0.4, 0.04);
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, pointer.x * 0.6, 0.04);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, pointer.y * 0.4, 0.04);
     camera.lookAt(0, 0, 0);
   });
   return null;

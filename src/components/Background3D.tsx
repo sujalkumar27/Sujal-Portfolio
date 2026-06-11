@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 function ParticleField({ count, trackMouse }: { count: number; trackMouse: boolean }) {
   const ref = useRef<THREE.Points>(null);
-  const { mouse, viewport } = useThree();
+  const { pointer, viewport } = useThree();
 
   const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -31,8 +31,8 @@ function ParticleField({ count, trackMouse }: { count: number; trackMouse: boole
     ref.current.rotation.y = time * 0.03;
 
     if (trackMouse) {
-      const targetX = (mouse.x * viewport.width) / 2;
-      const targetY = (mouse.y * viewport.height) / 2;
+      const targetX = (pointer.x * viewport.width) / 2;
+      const targetY = (pointer.y * viewport.height) / 2;
       ref.current.position.x += (targetX * 0.1 - ref.current.position.x) * 0.05;
       ref.current.position.y += (targetY * 0.1 - ref.current.position.y) * 0.05;
     }

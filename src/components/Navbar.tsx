@@ -23,7 +23,7 @@ export const Navbar = () => {
 
   // Show the right modifier key in the ⌘K badge.
   useEffect(() => {
-    setIsMac(/Mac|iPhone|iPad/.test(navigator.platform));
+    setIsMac(/Mac|iPhone|iPad/.test(navigator.userAgent));
   }, []);
 
   const fireCommandPalette = () => {
