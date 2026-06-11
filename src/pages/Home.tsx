@@ -40,7 +40,8 @@ export const Home = () => {
         <meta name="description" content="Software Engineer specializing in Java, Spring Boot, Python, and Generative AI. Oracle-certified Java developer building reliable backend systems and LLM-powered applications." />
         <meta property="og:title" content="Sujal Kumar — Software Engineer & GenAI Developer" />
         <meta property="og:description" content="Oracle-certified Java developer building backend systems and Generative AI applications. 300+ DSA problems solved. Currently engineering workflow automation used across 500+ accounts." />
-        <meta property="og:image" content="/sujal-kumar.jpg" />
+        <meta property="og:image" content="https://sujalkumar.dev/sujal-kumar.jpg" />
+        <meta property="og:url" content="https://sujalkumar.dev/" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
