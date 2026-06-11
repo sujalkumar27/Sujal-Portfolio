@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
-import { Send, Mail, MapPin, Globe, Box, Cpu, Zap, Palette, Layers, Sun, Home, Linkedin, Github, ChevronDown, Download, Phone, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { cn } from '../lib/utils';
+import { Send, Mail, MapPin, Linkedin, Github, ChevronDown, Download, Phone, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
 // Replace this with your Formspree endpoint (https://formspree.io — free tier).
 // Until you set one, the form falls back to opening the user's email client.

@@ -1,9 +1,9 @@
-import React, { Suspense, useState, useRef, useEffect } from 'react';
+import { Suspense, useState, useRef, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stage, MeshDistortMaterial, Float, MeshWobbleMaterial, PresentationControls, ContactShadows, useProgress, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { cn } from '../lib/utils';
-import { Maximize2, X, RotateCcw, Box, Cpu, Zap, Layers, Activity, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Maximize2, X, RotateCcw, Layers, Activity, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { createPortal } from 'react-dom';
 
@@ -17,7 +17,7 @@ const PlaceholderModel = ({ type, wireframe, color }: ModelViewerProps & { wiref
   const meshRef = useRef<THREE.Mesh>(null);
 
   // Smoothly animate scale and opacity on hover
-  useFrame((state, delta) => {
+  useFrame(() => {
     if (meshRef.current) {
       const targetScale = hovered ? (active ? 1.3 : 1.15) : 1;
       meshRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
